@@ -1,0 +1,50 @@
+The YS-IRTM module is famous among hobbyists for greatly facilitating 
+communication with a remote control. However, while it does the job and 
+is widely used, its design is perfectible.
+
+IRTM-remixed brings the following improvements to YS-IRTM:
+
+1. Replaced the STC11 used in YS-IRTM with an STC8G1K08A, which has a 
+smaller footprint, is less expensive, doesn't need an external crystal
+and its capacitors, and works over a wide range of supply voltage, 
+instead of only 5V for the STC11.
+
+2. Despite the NEC IR protocol using only 2 bytes, the original YS-IRTM 
+insists on using 3. The second byte of the payload being the complement 
+of the first, I simply removed it.
+
+3. The original YS-IRTM allowed to assign addresses to modules. 
+However, as they used a basic UART protocol, there was no way of 
+connecting several modules on the same serial line (no open-drain 
+output, no collision management). Moreover, the address of the 
+module wasn't transmitted in the packets sent to the host, making 
+it also impossible to know which module was sending them. I thus 
+removed this feature.
+
+4. Being able to change the serial line baud rate doesn't add much 
+value, so I hardcoded a value of 115200 Baud and removed the feature.
+
+5. Because the only remaining features are transmit and receive pairs
+of bytes, I removed the now useless header of the transmit command.
+
+CONCLUSION
+
+Thanks to these design decisions, IRTM-remixed is a fully transparent
+UART-to-IR adapter that can operate with supply voltages between 2.7V 
+and 5V, making it much more flexible than YS-IRTM.
+
+NOTES
+
+- Sending a single RC keypress takes 119.895 ms, i.e. a maximum of 8.4 
+keys per second or 168 Baud - an RC key is 2 bytes, each sent with 1 
+start, 1 stop and no parity, so a total of 20 bits. Autorepeat causes 
+additional keypress messages to be sent every 107.447 ms, representing 
+9.4 keys per second or 188 Baud.
+
+As you can see, the UART baud rate is far from being critical, so you 
+can safely reduce it, e.g. to 9600 Baud, if the IRTM-remixed module is
+connected to the MCU using long wires.
+
+- Though the STC8G1K08A supports supply voltages as low as 1.9V, the 
+CHQ1838 (IR receiver) requires at least 2.7V, also making it the 
+minimum supply voltage of the whole IRTM-remixed module.
