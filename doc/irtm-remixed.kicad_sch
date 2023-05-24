@@ -1303,7 +1303,7 @@
     (property "Reference" "C1" (at 181.61 63.4999 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "10nF" (at 181.61 66.0399 0)
+    (property "Value" "100nF" (at 181.61 66.0399 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "" (at 178.7652 68.58 0)
